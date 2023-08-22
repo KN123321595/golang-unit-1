@@ -40,6 +40,19 @@ func (a ApodMetadataStore) GetByID(id int) (*model.ApodMetadata, error) {
 	return &apodMetadata, nil
 }
 
+func (a ApodMetadataStore) GetByDate(date string) (*model.ApodMetadata, error) {
+	var apodMetadata model.ApodMetadata
+	err := a.db.Get(&apodMetadata, "SELECT * FROM apod_metadata WHERE date=$1", date)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &apodMetadata, nil
+}
+
 func (a ApodMetadataStore) Create(apodMetadata *model.ApodMetadata) error {
 	sqlStatement := `
 	INSERT INTO apod_metadata

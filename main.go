@@ -8,8 +8,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/justty/golang-units/configs"
+	rest_v1 "github.com/justty/golang-units/internal/handler/rest/v1"
 	"github.com/justty/golang-units/internal/service/apod"
 	"github.com/justty/golang-units/internal/store"
 
@@ -41,6 +43,7 @@ func run() error {
 	apodAPI := apod.NewApodAPI()
 	apodMetadataStore := store.NewApodMetadataStore(dbConnection)
 	apodWorker := apod.NewApodWorker(apodMetadataStore, apodAPI)
+	apodHandler := rest_v1.NewApodHandler(apodMetadataStore)
 
 	cronStore := cron.NewCronStore(dbConnection)
 	cronManager := cron.NewCron(cronStore)
@@ -51,8 +54,13 @@ func run() error {
 
 	go cronManager.Start()
 
+	router := mux.NewRouter()
+	apiRouter := router.PathPrefix("/api/v1").Subrouter()
+	apiRouter.HandleFunc("/apod_metadata", apodHandler.GetAllApodMetadata).Methods("GET")
+	http.Handle("/", router)
+	
 	fmt.Println("Started server on port 80")
-	fmt.Println(http.ListenAndServe(":80", nil))
+	fmt.Println(http.ListenAndServe(":80", router))
 
 	return nil
 }
