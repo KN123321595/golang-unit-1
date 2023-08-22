@@ -56,9 +56,9 @@ func run() error {
 
 	router := mux.NewRouter()
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
-	apiRouter.HandleFunc("/apod_metadata", apodHandler.GetAllApodMetadata).Methods("GET")
+	apiRouter.HandleFunc("/apod_metadata", apodHandler.GetApodMetadata).Methods("GET")
 	http.Handle("/", router)
-	
+
 	fmt.Println("Started server on port 80")
 	fmt.Println(http.ListenAndServe(":80", router))
 

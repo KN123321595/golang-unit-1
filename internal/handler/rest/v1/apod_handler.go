@@ -23,11 +23,11 @@ func NewApodHandler(apodMetadataStore ApodMetadataStore) ApodHandler {
 	}
 }
 
-func (a ApodHandler) GetAllApodMetadata(w http.ResponseWriter, r *http.Request) {
+func (a ApodHandler) GetApodMetadata(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	date := r.URL.Query().Get("date")
-	if (date == "") {
+	if date == "" {
 		arrApodMetadata, err := a.apodMetadataStore.GetAll()
 		if err != nil {
 			http.Error(w, fmt.Sprintf("error get all apod metadata: %s", err), http.StatusInternalServerError)
