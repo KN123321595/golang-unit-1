@@ -1,0 +1,13 @@
+package model
+
+type ApodMetadata struct {
+	ID             int    `db:"id"`
+	Explanation    string `db:"explanation" json:"explanation"`
+	MediaType      string `db:"media_type" json:"media_type"`
+	ServiceVersion string `db:"service_version" json:"service_version"`
+	Title          string `db:"title" json:"title"`
+	Hdurl          string `db:"hdurl" json:"hdurl"`
+	Url            string `db:"url" json:"url"`
+	ImagePath      string `db:"image_path"`
+	Date           string `db:"date" json:"date"`
+}
