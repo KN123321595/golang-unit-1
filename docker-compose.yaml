@@ -33,8 +33,9 @@ services:
   app:
     container_name: app
     build: ./
+    # command: /bin/sh -c  "sleep infinity & wait"
     volumes:
-      - ./images:/app/images
+      - ./images:/images
     ports:
       - 80:80
     restart: always

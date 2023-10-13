@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/justty/golang-units/internal/model"
+	"github.com/justty/golang-units/app/internal/model"
 )
 
 type ApodMetadataStore interface {
@@ -17,13 +17,13 @@ type ApodHandler struct {
 	apodMetadataStore ApodMetadataStore
 }
 
-func NewApodHandler(apodMetadataStore ApodMetadataStore) ApodHandler {
-	return ApodHandler{
+func NewApodHandler(apodMetadataStore ApodMetadataStore) *ApodHandler {
+	return &ApodHandler{
 		apodMetadataStore: apodMetadataStore,
 	}
 }
 
-func (a ApodHandler) GetApodMetadata(w http.ResponseWriter, r *http.Request) {
+func (a *ApodHandler) GetApodMetadata(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	date := r.URL.Query().Get("date")

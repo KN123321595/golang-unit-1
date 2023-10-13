@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/justty/golang-units/pkg/utils"
+	"github.com/justty/golang-units/app/pkg/utils"
 )
 
 type Job struct {
@@ -44,12 +44,12 @@ func (j Job) Task(f func()) Job {
 }
 
 type Cron struct {
-	store CronStore
+	store *CronStore
 	Jobs  []Job
 }
 
-func NewCron(store CronStore) Cron {
-	return Cron{store: store}
+func NewCron(store *CronStore) *Cron {
+	return &Cron{store: store}
 }
 
 func (c *Cron) AddJob(job Job) {

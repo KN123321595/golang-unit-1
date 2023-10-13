@@ -10,8 +10,8 @@ type CronStore struct {
 	db *sqlx.DB
 }
 
-func NewCronStore(db *sqlx.DB) CronStore {
-	return CronStore{
+func NewCronStore(db *sqlx.DB) *CronStore {
+	return &CronStore{
 		db: db,
 	}
 }
@@ -87,7 +87,7 @@ func (c *CronStore) activeJobsCount(jobName string) (int, error) {
 	return count, nil
 }
 
-func (c CronStore) SetAllFinished() (int, error) {
+func (c *CronStore) SetAllFinished() (int, error) {
 	result, err := c.db.Exec(`
 	UPDATE cron_logs 
 	SET end_time=now()

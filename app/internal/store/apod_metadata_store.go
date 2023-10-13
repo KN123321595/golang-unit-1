@@ -4,20 +4,20 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/justty/golang-units/internal/model"
+	"github.com/justty/golang-units/app/internal/model"
 )
 
 type ApodMetadataStore struct {
 	db *sqlx.DB
 }
 
-func NewApodMetadataStore(dbConnection *sqlx.DB) ApodMetadataStore {
-	return ApodMetadataStore{
+func NewApodMetadataStore(dbConnection *sqlx.DB) *ApodMetadataStore {
+	return &ApodMetadataStore{
 		db: dbConnection,
 	}
 }
 
-func (a ApodMetadataStore) GetAll() ([]model.ApodMetadata, error) {
+func (a *ApodMetadataStore) GetAll() ([]model.ApodMetadata, error) {
 	var arrApodMetadata []model.ApodMetadata
 	err := a.db.Select(&arrApodMetadata, "SELECT * FROM apod_metadata")
 	if err != nil {
@@ -27,7 +27,7 @@ func (a ApodMetadataStore) GetAll() ([]model.ApodMetadata, error) {
 	return arrApodMetadata, nil
 }
 
-func (a ApodMetadataStore) GetByID(id int) (*model.ApodMetadata, error) {
+func (a *ApodMetadataStore) GetByID(id int) (*model.ApodMetadata, error) {
 	var apodMetadata model.ApodMetadata
 	err := a.db.Get(&apodMetadata, "SELECT * FROM apod_metadata WHERE id=$1", id)
 	if err != nil {
@@ -40,7 +40,7 @@ func (a ApodMetadataStore) GetByID(id int) (*model.ApodMetadata, error) {
 	return &apodMetadata, nil
 }
 
-func (a ApodMetadataStore) GetByDate(date string) (*model.ApodMetadata, error) {
+func (a *ApodMetadataStore) GetByDate(date string) (*model.ApodMetadata, error) {
 	var apodMetadata model.ApodMetadata
 	err := a.db.Get(&apodMetadata, "SELECT * FROM apod_metadata WHERE date=$1", date)
 	if err != nil {
@@ -53,7 +53,7 @@ func (a ApodMetadataStore) GetByDate(date string) (*model.ApodMetadata, error) {
 	return &apodMetadata, nil
 }
 
-func (a ApodMetadataStore) Create(apodMetadata *model.ApodMetadata) error {
+func (a *ApodMetadataStore) Create(apodMetadata *model.ApodMetadata) error {
 	sqlStatement := `
 	INSERT INTO apod_metadata
 	(
@@ -86,7 +86,7 @@ func (a ApodMetadataStore) Create(apodMetadata *model.ApodMetadata) error {
 	return nil
 }
 
-func (a ApodMetadataStore) Update(apodMetadata *model.ApodMetadata) error {
+func (a *ApodMetadataStore) Update(apodMetadata *model.ApodMetadata) error {
 	sqlStatement := `
 	UPDATE apod_metadata
 	SET 

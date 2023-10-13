@@ -4,26 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
-	"github.com/justty/golang-units/internal/model"
+	"github.com/justty/golang-units/app/internal/model"
 )
 
 type ApodAPI struct {
-
+	apiKey string
 }
 
-func NewApodAPI() ApodAPI {
-	return ApodAPI {}
-}
-
-func (a ApodAPI) GetApod() (*model.ApodMetadata, error) {
-	apiKey := os.Getenv("APOD_API_KEY")
-	if apiKey == "" {
-		return nil, fmt.Errorf("APOD_API_KEY is not set in the .env file")
+func NewApodAPI(apiKey string) *ApodAPI {
+	return &ApodAPI {
+		apiKey: apiKey,
 	}
+}
 
-	url := fmt.Sprintf("https://api.nasa.gov/planetary/apod?api_key=%s", apiKey)
+func (a *ApodAPI) GetApod() (*model.ApodMetadata, error) {
+	url := fmt.Sprintf("https://api.nasa.gov/planetary/apod?api_key=%s", a.apiKey)
 
 	resp, err := http.Get(url)
 	if err != nil {
