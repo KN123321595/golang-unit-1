@@ -43,7 +43,7 @@ func run() error {
 	cronManager := cron.NewCron(cronStore)
 
 	if config.CronEnabled {
-		cronManager.AddJob(cron.NewJob().Name(apod.WorkerServiceName).Every(10 * time.Second).Task(func() { apodWorker.Process() }))
+		cronManager.AddJob(cron.NewJob().Name(apod.WorkerServiceName).Every(1 * time.Minute).Task(func() { apodWorker.Process() }))
 	}
 
 	go cronManager.Start()
