@@ -42,7 +42,7 @@ func run() error {
 	if config.CronEnabled {
 		cronManager := cron.NewCron()
 
-		cronManager.AddJob(cron.NewJob(apod.WorkerServiceName, 1*time.Minute, apodWorker.Process))
+		cronManager.AddJob(cron.NewJob(apod.WorkerServiceName, 24*time.Hour, apodWorker.Process))
 
 		cronManager.Start()
 	}
@@ -54,7 +54,7 @@ func run() error {
 	http.Handle("/", router)
 
 	log.Println("Started server on port 80")
-	log.Println(http.ListenAndServe(":8080", router))
+	log.Println(http.ListenAndServe(":80", router))
 
 	return nil
 }
