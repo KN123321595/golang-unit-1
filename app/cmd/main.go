@@ -39,14 +39,13 @@ func run() error {
 	apodWorker := apod.NewApodWorker(apodMetadataStore, apodAPI)
 	apodHandler := rest_v1.NewApodHandler(apodMetadataStore)
 
-	cronStore := cron.NewCronStore(dbConnection)
-	cronManager := cron.NewCron(cronStore)
-
 	if config.CronEnabled {
-		cronManager.AddJob(cron.NewJob().Name(apod.WorkerServiceName).Every(1 * time.Minute).Task(func() { apodWorker.Process() }))
-	}
+		cronManager := cron.NewCron()
 
-	go cronManager.Start()
+		cronManager.AddJob(cron.NewJob(apod.WorkerServiceName, 1*time.Minute, apodWorker.Process))
+
+		cronManager.Start()
+	}
 
 	router := mux.NewRouter()
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
