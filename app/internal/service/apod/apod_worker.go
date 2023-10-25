@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"time"
 
 	"github.com/justty/golang-units/app/internal/model"
@@ -43,7 +44,12 @@ func (a *ApodWorker) Process() error {
 	}
 
 	log.Println("Save image from APOD metadata")
-	imagePath, err := a.SaveImage(apodMetadata.Hdurl)
+	var imagePath string
+	if apodMetadata.Hdurl != "" {
+		imagePath, err = a.SaveImage(apodMetadata.Hdurl)
+	} else {
+		imagePath, err = a.SaveImage(apodMetadata.ThumbnailUrl)
+	}
 	if err != nil {
 		return fmt.Errorf("error save image path: %w", err)
 	}
@@ -69,8 +75,8 @@ func (a *ApodWorker) SaveImage(url string) (string, error) {
 		return "", fmt.Errorf("error reading image data: %w", err)
 	}
 
-	imagePath := fmt.Sprintf("../../images/%s.jpg", time.Now().Format("20060102_150405"))
-	if err = os.WriteFile(imagePath, imageData, 0644); err != nil {
+	imagePath := fmt.Sprintf("images/%s.jpg", time.Now().Format("20060102_150405"))
+	if err = os.WriteFile(path.Join("..", "..", imagePath), imageData, 0644); err != nil {
 		return "", fmt.Errorf("error saving image: %w", err)
 	}
 

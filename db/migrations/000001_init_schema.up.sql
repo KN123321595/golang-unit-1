@@ -5,6 +5,7 @@ CREATE TABLE apod_metadata (
     service_version TEXT,
     title TEXT,
     hdurl TEXT,
+    thumbnail_url TEXT,
     url TEXT,
     image_path TEXT,
     date TIMESTAMP

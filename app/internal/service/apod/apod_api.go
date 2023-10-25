@@ -19,7 +19,7 @@ func NewApodAPI(apiKey string) *ApodAPI {
 }
 
 func (a *ApodAPI) GetApod() (*model.ApodMetadata, error) {
-	url := fmt.Sprintf("https://api.nasa.gov/planetary/apod?api_key=%s", a.apiKey)
+	url := fmt.Sprintf("https://api.nasa.gov/planetary/apod?api_key=%s&thumbs=true", a.apiKey)
 
 	resp, err := http.Get(url)
 	if err != nil {

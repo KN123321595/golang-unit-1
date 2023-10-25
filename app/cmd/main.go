@@ -54,7 +54,7 @@ func run() error {
 	http.Handle("/", router)
 
 	log.Println("Started server on port 80")
-	log.Println(http.ListenAndServe(":80", router))
+	log.Println(http.ListenAndServe(":8080", router))
 
 	return nil
 }
